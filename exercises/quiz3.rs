@@ -13,8 +13,19 @@
 // to show that your changes allow alphabetical grades.
 
 // Execute `rustlings hint quiz3` or use the `hint` watch subcommand for a hint.
+pub trait ToAlphaGrade {
+    fn to_alpha_grade(self) -> String;
+}
 
-// I AM NOT DONE
+impl ToAlphaGrade for f32 {
+    fn to_alpha_grade(self) -> String {
+        if self < 1.0 {
+            "F".to_string()
+        } else {
+            "A+".to_string()
+        }
+    }
+}
 
 pub struct ReportCard {
     pub grade: f32,
@@ -27,6 +38,13 @@ impl ReportCard {
         format!("{} ({}) - achieved a grade of {}",
             &self.student_name, &self.student_age, &self.grade)
     }
+
+    pub fn print_alpha(&self) -> String {
+        format!("{} ({}) - achieved a grade of {}",
+            &self.student_name, &self.student_age, &self.grade.to_alpha_grade())
+
+    }
+
 }
 
 #[cfg(test)]
@@ -55,7 +73,7 @@ mod tests {
             student_age: 11,
         };
         assert_eq!(
-            report_card.print(),
+            report_card.print_alpha(),
             "Gary Plotter (11) - achieved a grade of A+"
         );
     }
