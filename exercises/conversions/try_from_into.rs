@@ -23,8 +23,6 @@ enum IntoColorError {
     IntConversion,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -38,6 +36,24 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let rgb_args: [i16;3] = [tuple.0, tuple.1, tuple.2];
+        let mut rgb_values: [u8;3] = [0, 0, 0];
+        for (i,x) in rgb_args.iter().enumerate() {
+            let conversion_result: Result<u8, _> = (*x).try_into();
+            match conversion_result {
+                Ok(c) => {
+                    rgb_values[i] = c;
+                },
+                Err(_) => {
+                    return Err(Self::Error::IntConversion);
+                }
+            }
+        }
+        Ok(Color {
+            red:rgb_values[0],
+            green:rgb_values[1],
+            blue:rgb_values[2],
+        })
     }
 }
 
@@ -45,6 +61,23 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let mut rgb_values: [u8;3] = [0, 0, 0];
+        for (i,x) in arr.iter().enumerate() {
+            let conversion_result: Result<u8, _> = (*x).try_into();
+            match conversion_result {
+                Ok(c) => {
+                    rgb_values[i] = c;
+                },
+                Err(_) => {
+                    return Err(Self::Error::IntConversion);
+                }
+            }
+        }
+        Ok(Color {
+            red:rgb_values[0],
+            green:rgb_values[1],
+            blue:rgb_values[2],
+        })
     }
 }
 
@@ -52,7 +85,28 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(Self::Error::BadLen);
+        }
+        let mut rgb_values: [u8;3] = [0, 0, 0];
+        for (i,x) in slice.iter().enumerate() {
+            let conversion_result: Result<u8, _> = (*x).try_into();
+            match conversion_result {
+                Ok(c) => {
+                    rgb_values[i] = c;
+                },
+                Err(_) => {
+                    return Err(Self::Error::IntConversion);
+                }
+            }
+        }
+        Ok(Color {
+            red:rgb_values[0],
+            green:rgb_values[1],
+            blue:rgb_values[2],
+        })
     }
+
 }
 
 fn main() {
